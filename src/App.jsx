@@ -70,8 +70,13 @@ class App extends Component {
       },
       birthsign: {
         onBirthsignClick: this.onShowSelector.bind(this, 'birthsign')
+      },
+      randomizer: {
+        onRandomizerInfoClick: this.onRandomizerInfoClick.bind(this),
+        onRandomizerOptionsClick: this.onRandomizerOptionsClick.bind(this),
       }
     };
+    .0
 
     this.onSelectionClick = this.onSelectionClick.bind(this);
     this.showHelp         = this.showHelp.bind(this);
@@ -95,7 +100,8 @@ class App extends Component {
       selecting: {
         aspect: 'help'
       }
-    })
+    });
+    console.log("help click");
   }
   setQueryStringFromState() {
     setTimeout(() => {
@@ -172,6 +178,25 @@ class App extends Component {
       minorSkills
     };
   }
+
+  onRandomizerInfoClick()
+  {
+    this.setState({
+      selecting: {
+        aspect: 'randomizerInfo'
+      }
+    });
+  }
+  onRandomizerOptionsClick()
+  {
+    this.setState({
+      selecting: {
+        aspect: 'randomizerOptions'
+      }
+    });
+    console.log("options click");
+  }
+
   render() {
     return (
       <div id="app">

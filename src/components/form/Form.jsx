@@ -1,6 +1,7 @@
 import Person from './Person';
 import Class from './Class';
 import Birthsign from './Birthsign';
+import Randomizer from './Randomizer';
 
 function Form(props) {
     return (
@@ -22,6 +23,11 @@ function Form(props) {
                 eventHandlers={props.eventHandlers.birthsign}
                 birthsign={props.data.birthsign}
             />
+            <div id="randomizer">
+                <Randomizer
+                    eventHandlers={props.eventHandlers.randomizer}
+                />
+            </div>
         </div>
     );
 }
