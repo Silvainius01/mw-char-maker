@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import randomizerSettings from './data/randomizerSettings';
 import HoverableElement from '../components/hoverable/HoverableElement';
 
@@ -13,31 +15,31 @@ class RandomizerOptionElement extends HoverableElement {
     }
 
     getButtonHtml() {
-        const cv = this.option.value.toString();
+        const hook = this.props.hooks[this.props.name];
         return (
-            <button 
-            name={this.props.name} 
-            value={this.option.value} 
-            onClick={this.events.onRandomizerToggleClick}
+            <button
+                name={this.props.name}
+                value={this.option.value}
+                onClick={ e => hook.update(e.target.value) }//this.events.onRandomizerToggleClick}
             >
-                {cv.replace(/^./, cv[0].toUpperCase())}
+                {hook.value}
             </button>
         )
     }
 
     getInputHtml() {
+        const hook = this.props.hooks[this.props.name];
         return (
-            <input 
-            name={this.props.name} 
-            type={this.props.type} 
-            defaultValue={this.option.value}
-            onChange={this.events.onRandomizerNumberUpdate}
+            <input
+                name={this.props.name}
+                type={this.props.type}
+                value={this.option.value}
+                onChange={ e => hook.update(e.target.value) }
             />
         )
     }
 
     render() {
-        const optionInfo = randomizerSettings[this.props.name];
         const input = this.props.type === "button"
             ? (this.getButtonHtml())
             : (this.getInputHtml());
@@ -61,11 +63,10 @@ class RandomizerOptionElement extends HoverableElement {
     }
 
     getTooltip() {
-        const optionInfo = randomizerSettings[this.props.name];
-        const defaultValue = "Default Value: " + optionInfo.default;
+        const defaultValue = "Default Value: " + this.option.default;
         return (
             <div className="tooltip randomizer-option" hidden>
-                <div>{optionInfo.description}</div>
+                <div>{this.option.description}</div>
                 <br />
                 <div>{defaultValue}</div>
             </div>
