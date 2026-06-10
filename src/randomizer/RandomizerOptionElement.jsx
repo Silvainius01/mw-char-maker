@@ -4,6 +4,7 @@ import HoverableElement from '../components/hoverable/HoverableElement';
 class RandomizerOptionElement extends HoverableElement {
     constructor(props) {
         super(props);
+        this.events = props.randomizer.events;
         this.option = props.randomizer.settings[this.props.name];
     }
 
@@ -17,7 +18,7 @@ class RandomizerOptionElement extends HoverableElement {
             <button 
             name={this.props.name} 
             value={this.option.value} 
-            onClick={this.props.onClick}
+            onClick={this.events.onRandomizerToggleClick}
             >
                 {cv.replace(/^./, cv[0].toUpperCase())}
             </button>

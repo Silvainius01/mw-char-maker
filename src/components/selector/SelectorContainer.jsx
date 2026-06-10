@@ -10,7 +10,6 @@ import RandomizerOptions from '../../randomizer/RandomizerOptions';
 
 function SelectorContainer(props) {
     const selectingFor = props.selecting && props.selecting.aspect;
-    console.log(selectingFor)
     return (
         <div
             className="selector-container"

@@ -35,7 +35,7 @@ const initialState = {
 
   // If selecting, an object which holds "aspect" and "index" info about what is being selected
   // Example: selecting: { aspect: 'majorSkills', index: 1 }
-  selecting: null,
+  selecting: null
 }
 
 class App extends Component {
@@ -87,6 +87,7 @@ class App extends Component {
       settings: structuredClone(randomizerSettings)
     }
 
+    // Ensure all settings start with their default values.
     const settings = this.randomizer.settings;
     for(let key of Object.keys(settings)) {
       settings[key].value = settings[key].default;
@@ -212,13 +213,17 @@ class App extends Component {
     const option = el && el.getAttribute('name');
     const value = el && el.getAttribute('value');
     const selecting = this.state.selecting;
-    const firstChild = el && el.firstChild;
+    const newValue = value === "false" ? true : false;
 
-    console.log("Editing randomizer setting: " + option);
-
-    if(firstChild.nodeName === "#text") {
-    }
-
+    this.randomizer.settings[option].value = newValue;
+    
+    // Update the displayed value immeadiatly.
+    // TODO: do this through setState?
+    const str = newValue.toString();
+    el.value = newValue;
+    el.firstChild.data = str.replace(/^./, str[0].toUpperCase());
+    
+    console.log("Toggle: " + option + " " + value + " -> " + this.randomizer.settings[option].value)
   }
 
   render() {
