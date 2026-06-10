@@ -5,11 +5,12 @@ import SkillSelector from './SkillSelector';
 import BirthsignSelector from './BirthsignSelector';
 import Help from './Help';
 
-import RandomizerInfo from './randomizer/RandomizerInfo';
-import RandomizerOptions from './randomizer/RandomizerOptions';
+import RandomizerInfo from '../../randomizer/RandomizerInfo';
+import RandomizerOptions from '../../randomizer/RandomizerOptions';
 
 function SelectorContainer(props) {
     const selectingFor = props.selecting && props.selecting.aspect;
+    console.log(selectingFor)
     return (
         <div
             className="selector-container"
@@ -45,7 +46,8 @@ function SelectorContainer(props) {
             />
             <RandomizerOptions
                 active={selectingFor === 'randomizerOptions'}
-                onSelectionClick={props.onSelectionClick.bind(null, null, null)}
+                onSelectionClick={props.onSelectionClick}
+                randomizer={props.randomizer}
             />    
             <RandomizerInfo
                 active={selectingFor === 'randomizerInfo'}

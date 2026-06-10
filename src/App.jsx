@@ -6,6 +6,8 @@ import SelectorContainer from './components/selector/SelectorContainer';
 
 import { getStateFromQueryString, getQueryStringFromState } from './utils';
 
+import randomizerSettings from './randomizer/data/randomizerSettings';
+
 // Default state describing default character aspect selections
 const initialState = {
   race: 'dark_elf',
@@ -63,23 +65,34 @@ class App extends Component {
         onSexClick: this.changeSex.bind(this)
       },
       class: {
-        onSpecializationClick:   this.onShowSelector.bind(this, 'specialization'),
+        onSpecializationClick: this.onShowSelector.bind(this, 'specialization'),
         onFavoredAttributeClick: this.onShowSelector.bind(this, 'favoredAttributes'),
-        onMajorSkillClick:       this.onShowSelector.bind(this, 'majorSkills'),
-        onMinorSkillClick:       this.onShowSelector.bind(this, 'minorSkills'),
+        onMajorSkillClick: this.onShowSelector.bind(this, 'majorSkills'),
+        onMinorSkillClick: this.onShowSelector.bind(this, 'minorSkills'),
       },
       birthsign: {
         onBirthsignClick: this.onShowSelector.bind(this, 'birthsign')
-      },
-      randomizer: {
-        onRandomizerInfoClick: this.onRandomizerInfoClick.bind(this),
-        onRandomizerOptionsClick: this.onRandomizerOptionsClick.bind(this),
       }
     };
-    .0
 
     this.onSelectionClick = this.onSelectionClick.bind(this);
-    this.showHelp         = this.showHelp.bind(this);
+    this.showHelp = this.showHelp.bind(this);
+
+    this.randomizer = {
+      events: {
+        onRandomizerInfoClick: this.onRandomizerInfoClick.bind(this),
+        onRandomizerOptionsClick: this.onRandomizerOptionsClick.bind(this),
+        onRandomizerToggleClick: this.onRandomizerToggleClick.bind(this),
+      },
+      settings: structuredClone(randomizerSettings)
+    }
+
+    const settings = this.randomizer.settings;
+    for(let key of Object.keys(settings)) {
+      settings[key].value = settings[key].default;
+    }
+
+    console.log("hello");
   }
   onShowSelector(aspect, e) {
     this.setState({
@@ -101,7 +114,6 @@ class App extends Component {
         aspect: 'help'
       }
     });
-    console.log("help click");
   }
   setQueryStringFromState() {
     setTimeout(() => {
@@ -109,12 +121,14 @@ class App extends Component {
     }, 0);
   }
   onSelectionClick(e) {
-    const el        = e && e.target.closest('.hoverable');
-    const value     = el && el.getAttribute('name');
+    const el = e && e.target.closest('.hoverable');
+    const value = el && el.getAttribute('name');
     const selecting = this.state.selecting;
-    const newState  = {
+    const newState = {
       selecting: null
     };
+
+    console.log("selecting = " + selecting.aspect + " | value = " + value);
 
     if (value) {
       if (selecting.aspect.includes('Skill')) {
@@ -132,14 +146,14 @@ class App extends Component {
     this.setQueryStringFromState();
   }
   getNewStateFromFavoredAttributeSelection(value, selecting) {
-    const index             = selecting.index;
-    const otherIndex        = index === '0' ? 1 : 0;
+    const index = selecting.index;
+    const otherIndex = index === '0' ? 1 : 0;
     const favoredAttributes = this.state.favoredAttributes;
-    const prevValue         = favoredAttributes[index];
-    const otherValue        = favoredAttributes[otherIndex];
+    const prevValue = favoredAttributes[index];
+    const otherValue = favoredAttributes[otherIndex];
 
     if (otherValue === value) {
-      favoredAttributes[index]      = otherValue;
+      favoredAttributes[index] = otherValue;
       favoredAttributes[otherIndex] = prevValue;
     }
     else {
@@ -151,8 +165,8 @@ class App extends Component {
     };
   }
   getNewStateFromSkillSelection(value, selecting) {
-    const index       = selecting.index;
-    const prevValue   = this.state[selecting.aspect][index];
+    const index = selecting.index;
+    const prevValue = this.state[selecting.aspect][index];
     const majorSkills = this.state.majorSkills.slice(0);
     const minorSkills = this.state.minorSkills.slice(0);
     let currentSkillIndex;
@@ -179,22 +193,32 @@ class App extends Component {
     };
   }
 
-  onRandomizerInfoClick()
-  {
+  onRandomizerInfoClick() {
     this.setState({
       selecting: {
         aspect: 'randomizerInfo'
       }
     });
   }
-  onRandomizerOptionsClick()
-  {
+  onRandomizerOptionsClick() {
     this.setState({
       selecting: {
         aspect: 'randomizerOptions'
       }
     });
-    console.log("options click");
+  }
+  onRandomizerToggleClick(e) {
+    const el = e && e.target;
+    const option = el && el.getAttribute('name');
+    const value = el && el.getAttribute('value');
+    const selecting = this.state.selecting;
+    const firstChild = el && el.firstChild;
+
+    console.log("Editing randomizer setting: " + option);
+
+    if(firstChild.nodeName === "#text") {
+    }
+
   }
 
   render() {
@@ -208,6 +232,7 @@ class App extends Component {
         <Form
           data={this.state}
           eventHandlers={this.eventHandlers}
+          randomizer={this.randomizer}
         />
         <Result
           data={this.state}
@@ -215,6 +240,7 @@ class App extends Component {
         <SelectorContainer
           selecting={this.state.selecting}
           onSelectionClick={this.onSelectionClick}
+          randomizer={this.randomizer}
         />
       </div>
     );

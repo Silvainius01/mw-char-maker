@@ -1,4 +1,4 @@
-const randomizerOptions = {
+const randomizerSettings = {
     NumAttributes: {
         name: 'Num Attributes',
         description: 'The number of attributes to pull skills from.',
@@ -72,7 +72,7 @@ const randomizerOptions = {
     },
     ForceLockSkill: {
         name: 'Force Lockpicking Skill',
-        description: 'If enabled, forces the generator to include at least on skill that opens locks.',
+        description: 'If enabled, forces the generator to include at least one skill that opens locks.',
         default: false
     },
     ForceWeaponSkill: {
@@ -87,9 +87,9 @@ const randomizerOptions = {
     },
     ForceTrainableAttrs: {
         name: 'Force Trainable Attributes',
-        description: 'If enabled, forces the generator to keep at least once skill from every attribute under Misc Skills.',
+        description: 'If enabled, forces the generator to keep at least one skill from every attribute under Misc Skills.',
         default: true
     }
 };
 
-export default randomizerOptions;
+export default randomizerSettings;

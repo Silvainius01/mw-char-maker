@@ -466,12 +466,57 @@ input[type=text] {
   }
 
   #randomizer-options {
-    text-align: left;
+    // display:table;
 
     >div {
-      &:first-child {
-        padding-right: 15px;
-        padding-bottom: 20px;
+      &:nth-child(2) {
+        margin-bottom: 20px;
+      }
+    }
+
+    .options-menu {
+      display:table;
+      border-collapse: collapse;
+
+      .randomizer-opt {
+        display: table-row;
+
+
+        >label {
+          display: table-cell;
+          text-align: left;
+
+          >span {
+            padding-left: 2px;
+            padding-right: 2px;
+          }
+        }
+
+        >input {
+          display: table-cell;
+          vertical-align: middle;
+          background-color: black;
+          
+          color: $regular-text-color;
+          font-family: Pelagiad;
+          font-size: 20px;
+
+          padding-left: 5px;
+          border-style: ridge;
+          border-color : $regular-text-color;
+          border-top: 0px;
+          border-left: 0px;
+          border-right: 0px;
+        }
+        >button {
+          float:none;
+          display: table-cell;
+
+          margin: 0px;
+          border: 0px;
+          padding: 0px;
+          outline: 0px;
+        }
       }
     }
 

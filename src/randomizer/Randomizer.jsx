@@ -1,4 +1,4 @@
-import RandomizerOptionElement from "../hoverable/randomizer/RandomizerOptionElement";
+import RandomizerOptionElement from "./RandomizerOptionElement";
 
 /*
 <RandomizerElement
@@ -14,11 +14,11 @@ function Randomizer(props) {
                 Randomize
             </button>
 
-            <button onClick={props.eventHandlers.onRandomizerOptionsClick}>
+            <button onClick={props.randomizer.events.onRandomizerOptionsClick}>
                 Options
             </button>
                 
-            <button onClick={props.eventHandlers.onRandomizerInfoClick}>
+            <button onClick={props.randomizer.events.onRandomizerInfoClick}>
                 Info
             </button>
         </div>
