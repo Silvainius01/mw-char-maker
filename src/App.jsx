@@ -83,13 +83,14 @@ class App extends Component {
         onRandomizerInfoClick: this.onRandomizerInfoClick.bind(this),
         onRandomizerOptionsClick: this.onRandomizerOptionsClick.bind(this),
         onRandomizerToggleClick: this.onRandomizerToggleClick.bind(this),
+        onRandomizerNumberUpdate: this.onRandomizerNumberUpdate.bind(this),
       },
       settings: structuredClone(randomizerSettings)
     }
 
     // Ensure all settings start with their default values.
     const settings = this.randomizer.settings;
-    for(let key of Object.keys(settings)) {
+    for (let key of Object.keys(settings)) {
       settings[key].value = settings[key].default;
     }
 
@@ -211,19 +212,33 @@ class App extends Component {
   onRandomizerToggleClick(e) {
     const el = e && e.target;
     const option = el && el.getAttribute('name');
-    const value = el && el.getAttribute('value');
+    const valueStr = el && el.getAttribute('value');
     const selecting = this.state.selecting;
-    const newValue = value === "false" ? true : false;
+    const newValue = valueStr === "false" ? true : false;
 
     this.randomizer.settings[option].value = newValue;
-    
+
     // Update the displayed value immeadiatly.
     // TODO: do this through setState?
     const str = newValue.toString();
     el.value = newValue;
     el.firstChild.data = str.replace(/^./, str[0].toUpperCase());
+
+    console.log("Toggle: " + option + " " + valueStr + " -> " + this.randomizer.settings[option].value)
+  }
+  onRandomizerNumberUpdate(e) {
+    const el = e && e.target;
+    const option = el && el.getAttribute('name');
+    const valueStr = el && el.getAttribute('value'); // old value
+    const settings = this.randomizer.settings;
     
-    console.log("Toggle: " + option + " " + value + " -> " + this.randomizer.settings[option].value)
+    const newValue = Number.isNaN(el.valueAsNumber) 
+      ? settings[option].default
+      : el.valueAsNumber;
+
+    el.value = newValue;
+    this.randomizer.settings[option].value = newValue;
+    console.log("Number: " + option + " " + valueStr + " -> " + this.randomizer.settings[option].value);
   }
 
   render() {

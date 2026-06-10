@@ -25,11 +25,22 @@ class RandomizerOptionElement extends HoverableElement {
         )
     }
 
+    getInputHtml() {
+        return (
+            <input 
+            name={this.props.name} 
+            type={this.props.type} 
+            defaultValue={this.option.value}
+            onChange={this.events.onRandomizerNumberUpdate}
+            />
+        )
+    }
+
     render() {
         const optionInfo = randomizerSettings[this.props.name];
         const input = this.props.type === "button"
             ? (this.getButtonHtml())
-            : (<input name={this.props.name} type={this.props.type} defaultValue={optionInfo.default}/>);
+            : (this.getInputHtml());
         return (
             <div id={this.props.name} className="randomizer-opt">
                 <label
