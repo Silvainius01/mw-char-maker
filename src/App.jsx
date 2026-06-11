@@ -211,7 +211,10 @@ class App extends Component {
     });
   }
   onRandomizerClick() {
-    generateCharacter(this.randomizer.settings);
+    const newState = generateCharacter(this.randomizer.settings);
+
+    this.setState(newState);
+    this.setQueryStringFromState();
   }
 
   render() {

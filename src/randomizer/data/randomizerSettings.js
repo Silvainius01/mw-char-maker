@@ -5,6 +5,12 @@ const randomizerSettings = {
         type: "number",
         default: 3
     },
+    NumSkills: { // Defined in case some modder comes around and messes with skills
+        name: 'Num Skills',
+        description: 'The number of skills pulled from the attribute pool.',
+        type: "number",
+        default: 10
+    },
     MaxWeaponSkills: {
         name: 'Max Weapon Skills',
         description: 'The maximum amount of weapon skills that can be included.',

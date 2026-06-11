@@ -11,9 +11,45 @@ const attrNames = Object.keys(primaryAttributes);
 function attr(skill) {
     return skills[skill].governingAttribute;
 }
+function attrCount(_skills) {
+    let attributeCount = {};
+    attrNames.forEach((key) => { attributeCount[key] = 0; });
+    _skills.forEach((skill) => { ++attributeCount[attr(skill)] })
+    return attributeCount;
+}
+function getAttrsFromSkills(options, _skills) {
+    const numAttrs = options['NumAttributes'].value;
+    const attributeCount = attrCount(_skills);
+    //const attributeNames = [...attrNames];
+    return attrNames.sort((a, b) => attributeCount[b] - attributeCount[a]).slice(0, numAttrs);
+}
+
+function spec(skill) {
+    return skills[skill].spec;
+}
+function getSpecFromSkills(options, _skills) {
+    const halfLength = _skills.length / 2;
+    const majorWeight = options['MajorSkillSpecWeight'].value;
+    const minorWeight = options['MinorSkillSpecWeight'].value;
+    let most = 'combat';
+    let specCount = {
+        magic: 0,
+        combat: 0,
+        stealth: 0
+    }
+
+    for(let i = 0; i < _skills.length; ++i) {
+        const s = spec(_skills[i]);
+        const score = i < halfLength ? majorWeight : minorWeight;
+        specCount[s] += score;
+        if(specCount[s] > specCount[most])
+            most = s;
+    }
+    return most;
+}
 
 function generateSkills(options, attributes) {
-    const numSkills = 10;
+    const numSkills = options['NumSkills'].value;
     const maxLocks = options['MaxLockSkills'].value;
     const maxArmors = options['MaxArmorSkills'].value;
     const maxWeapons = options['MaxWeaponSkills'].value;
@@ -39,11 +75,7 @@ function generateSkills(options, attributes) {
     const skillNames = Object.keys(skills).filter((s) => !disabled.includes(s));
     const attrSkills = shuffle(skillNames.filter((s) => { return attributes.includes(attr(s)); }));
     const miscSkills = shuffle(skillNames.filter((s) => { return !attributes.includes(attr(s)); }));
-
-    // Get total number of skills in each attribute
-    const attributeCount = {};
-    attrNames.forEach((key) => { attributeCount[key] = 0; });
-    skillNames.forEach((skill) => { ++attributeCount[attr(skill)] })
+    const attributeCount = attrCount(skillNames); // Total number of skills in each attribute
 
     // Trackers for what kind of skills are added
     let numLocks = 0;
@@ -113,11 +145,11 @@ function generateSkills(options, attributes) {
     if (classSkills.length === numSkills)
         return classSkills;
 
+    // Validation utility
     const missingLocks = () => options['ForceLockSkill'].value ? 1 - numLocks : 0;
     const missingArmors = () => options['ForceArmorSkill'].value ? 1 - numArmors : 0;
     const missingWeapons = () => options['ForceWeaponSkill'].value ? 1 - numWeapons : 0;
     const missingReqs = () => missingLocks() + missingArmors() + missingWeapons();
-
     const IsRequired = (skill) => {
         const result =
             (missingLocks() > 0 && lockSkills.includes(skill)) ||
@@ -189,19 +221,77 @@ function generateSkills(options, attributes) {
     return classSkills;
 }
 
-function getAttrsFromSkills(options, skills) {
-    const attributeCount = {};
-    const numAttrs = options['NumAttributes'].value;
 
-    attrNames.forEach((key) => { attributeCount[key] = 0; });
-    skills.forEach((skill) => { ++attributeCount[attr(skill)] })
-    return attrNames.sort((a, b) => attributeCount[b] - attributeCount[a]).splice(0, numAttrs);
+function generateAttrDistribution(options, _skills, attriubtes) {
+    const attributeCount = attrCount(_skills.filter((s) => attriubtes.includes(attr(s))));
+    let scores = {
+        total: 0
+    };
+
+    Object.entries(attributeCount).forEach((entry) => {
+        scores.total += entry[1];
+        scores[entry[0]] = { score: entry[1] };
+    });
+
+    return scores;
 }
+function generateRaceDistribution(options, _skills, attributes) {
+    const minScore = options['MinRaceScore'].value;
+    const skillWeight = options['RaceSkillWeight'].value;
+    const attributeWeight = options['RaceAttributeWeight'].value;
 
-function generateRaceDistibution(options, skills, attributes) {
+    let scores = {
+        total: 0
+    };
 
+    Object.entries(races).forEach((entry) => {
+        let skillScore = 0;
+        let totalScoreMale = 0;
+        let totalScoreFemale = 0;
+        const name = entry[0];
+        const race = entry[1];
+
+        Object.entries(race.skills).forEach((entry) => {
+            const skill = entry[0];
+            const bonus = entry[1];
+            if (_skills.includes(skill))
+                skillScore += bonus * skillWeight;
+        });
+        Object.entries(race.primaryAttributes.male).forEach((entry) => {
+            const attr = entry[0];
+            const value = entry[1];
+            if (attributes.includes(attr))
+                totalScoreMale += (value - 40) * attributeWeight;
+        });
+        Object.entries(race.primaryAttributes.female).forEach((entry) => {
+            const attr = entry[0];
+            const value = entry[1];
+            if (attributes.includes(attr))
+                totalScoreFemale += (value - 40) * attributeWeight;
+        });
+
+        totalScoreMale += skillScore;
+        totalScoreFemale += skillScore;
+
+        if (totalScoreMale >= minScore)
+            scores.total += totalScoreMale;
+        if (totalScoreFemale >= minScore)
+            scores.total += totalScoreFemale;
+
+        scores[`Male ${name}`] = {
+            name: name,
+            sex: 'male',
+            score: totalScoreMale
+        }
+        scores[`Female ${name}`] = {
+            name: name,
+            sex: 'female',
+            score: totalScoreMale
+        }
+    });
+
+    return scores;
 }
-
 
 function generateCharacter(options) {
     console.log("Generating new character...");
@@ -213,10 +303,53 @@ function generateCharacter(options) {
     const attrsInit = shuffle(attrNames.filter((a) => a != "luck")).slice(0, numAttrs);
     console.log(attrsInit);
 
-    const skills = generateSkills(options, attrsInit);
-    const attrsActual = getAttrsFromSkills(options, skills);
+    const classSkills = generateSkills(options, attrsInit);
+    const attrsActual = getAttrsFromSkills(options, classSkills);
     console.log(attrsActual);
-    console.log(skills);
+    console.log(classSkills);
+
+    const attrScores = generateAttrDistribution(options, classSkills, attrsActual);
+    const raceScores = generateRaceDistribution(options, classSkills, attrsActual);
+
+    const randomEntry = (scores, minScore) => {
+        const r = Math.random();
+        const totalScore = scores.total;
+        const entries = Object.entries(scores)
+            .filter((e) => e[0] !== "total" && e[1] !== undefined)
+            .sort((a, b) => b[1].score - a[1].score);
+
+        let chance = 0;
+        let selected = 0;
+        for (let i = 0; i < entries.length; ++i) {
+            const entry = entries[i];
+            let score = entry[1].score >= minScore ? entry[1].score : 0;
+            chance += score / totalScore;
+            if (r < chance) {
+                selected = i;
+                break;
+            }
+        }
+
+        return entries[selected];
+    }
+
+    const firstAttribute = attrsActual[0];
+    const secondAttribute = attrsActual[1];
+    const specialization = getSpecFromSkills(options, classSkills);
+    const selectedRace = randomEntry(raceScores, options['MinRaceScore'].value);
+    console.log(selectedRace[0]);
+    console.log(firstAttribute + " " + secondAttribute);
+
+    const nsHalf = options['NumSkills'].value / 2;
+    const newState = {
+        race: selectedRace[1].name,
+        sex: selectedRace[1].sex,
+        specialization: specialization,
+        favoredAttributes: [firstAttribute, secondAttribute],
+        majorSkills: classSkills.slice(0, nsHalf),
+        minorSkills: classSkills.slice(nsHalf)
+    }
+    return newState;
 }
 
 export {
