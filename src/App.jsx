@@ -4,9 +4,11 @@ import Form from './components/form/Form';
 import Result from './components/result/Result';
 import SelectorContainer from './components/selector/SelectorContainer';
 
-import { getStateFromQueryString, getQueryStringFromState } from './utils';
-
 import randomizerSettings from './randomizer/data/randomizerSettings';
+
+
+import { getStateFromQueryString, getQueryStringFromState } from './utils';
+import { generateCharacter } from './randomizer/Randomizer';
 
 // Default state describing default character aspect selections
 const initialState = {
@@ -80,6 +82,7 @@ class App extends Component {
 
     this.randomizer = {
       events: {
+        onRandomizerClick: this.onRandomizerClick.bind(this),
         onRandomizerInfoClick: this.onRandomizerInfoClick.bind(this),
         onRandomizerOptionsClick: this.onRandomizerOptionsClick.bind(this),
       },
@@ -206,6 +209,9 @@ class App extends Component {
         aspect: 'randomizerOptions'
       }
     });
+  }
+  onRandomizerClick() {
+    generateCharacter(this.randomizer.settings);
   }
 
   render() {

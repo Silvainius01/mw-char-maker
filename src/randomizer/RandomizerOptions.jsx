@@ -39,6 +39,9 @@ function RandomizerOptions(props) {
     const [b2, setB2] = useState(initButton('ForceWeaponSkill')); hookDict['ForceWeaponSkill'] = { value: b2, setter: setB2 };
     const [b3, setB3] = useState(initButton('ForceArmorSkill')); hookDict['ForceArmorSkill'] = { value: b3, setter: setB3 };
     const [b4, setB4] = useState(initButton('ForceTrainableAttrs')); hookDict['ForceTrainableAttrs'] = { value: b4, setter: setB4 };
+    const [b5, setB5] = useState(initButton('UnarmoredIsArmor')); hookDict['UnarmoredIsArmor'] = { value: b5, setter: setB5 };
+    const [b6, setB6] = useState(initButton('MarksmanIsWeapon')); hookDict['MarksmanIsWeapon'] = { value: b6, setter: setB6 };
+    const [b7, setB7] = useState(initButton('HandToHandIsWeapon')); hookDict['HandToHandIsWeapon'] = { value: b7, setter: setB7 };
     let buttonUpdate = (key, cv) => {
         // Button value comes in as a string
         const nv = cv === "false" ? true : false;

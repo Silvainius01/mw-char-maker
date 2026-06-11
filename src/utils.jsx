@@ -154,10 +154,28 @@ function getIconSrc(path) {
     return modules[path].default;
 }
 
+// Fisher-Yates
+function shuffle(array) {
+    if(!Array.isArray(array))
+        return array;
+
+    let i = array.length;
+    let rv = structuredClone(array);
+    while(i > 1) {
+        let r = Math.floor(Math.random() * i--);
+        let t = rv[r];
+        rv[r] = rv[i];
+        rv[i] = t;
+    }
+
+    return rv;
+}
+
 export {
     getStateFromQueryString,
     getQueryStringFromState,
     toPresentationStr,
     createSpecialsHtml,
-    getIconSrc
+    getIconSrc,
+    shuffle
 }

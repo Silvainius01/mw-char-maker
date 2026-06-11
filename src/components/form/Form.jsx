@@ -1,7 +1,7 @@
 import Person from './Person';
 import Class from './Class';
 import Birthsign from './Birthsign';
-import Randomizer from '../../randomizer/Randomizer';
+import RandomizerControls from '../../randomizer/RandomizerControls';
 
 function Form(props) {
     return (
@@ -24,7 +24,7 @@ function Form(props) {
                 birthsign={props.data.birthsign}
             />
             <div id="randomizer">
-                <Randomizer
+                <RandomizerControls
                     randomizer={props.randomizer}
                 />
             </div>
