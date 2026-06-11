@@ -6,6 +6,8 @@ import primaryAttributes from "../gamedata/primaryAttributes";
 
 import RandomizerOptionElement from "./RandomizerOptionElement";
 
+const attrNames = Object.keys(primaryAttributes);
+
 function attr(skill) {
     return skills[skill].governingAttribute;
 }
@@ -40,7 +42,7 @@ function generateSkills(options, attributes) {
 
     // Get total number of skills in each attribute
     const attributeCount = {};
-    Object.keys(primaryAttributes).forEach((key) => { attributeCount[key] = 0; });
+    attrNames.forEach((key) => { attributeCount[key] = 0; });
     skillNames.forEach((skill) => { ++attributeCount[attr(skill)] })
 
     // Trackers for what kind of skills are added
@@ -180,12 +182,26 @@ function generateSkills(options, attributes) {
         }
     }
 
-    if(classSkills.length > numSkills)
+    if (classSkills.length > numSkills)
         console.error("TOO MANY SKILLS");
-    else if(classSkills.length < numSkills)
+    else if (classSkills.length < numSkills)
         console.error("NOT ENOUGH SKILLS");
     return classSkills;
 }
+
+function getAttrsFromSkills(options, skills) {
+    const attributeCount = {};
+    const numAttrs = options['NumAttributes'].value;
+
+    attrNames.forEach((key) => { attributeCount[key] = 0; });
+    skills.forEach((skill) => { ++attributeCount[attr(skill)] })
+    return attrNames.sort((a, b) => attributeCount[b] - attributeCount[a]).splice(0, numAttrs);
+}
+
+function generateRaceDistibution(options, skills, attributes) {
+
+}
+
 
 function generateCharacter(options) {
     console.log("Generating new character...");
@@ -194,11 +210,13 @@ function generateCharacter(options) {
     const numAttrs = options['NumAttributes'].value;
 
     // Choose random attributes
-    const attrsInit = shuffle(Object.keys(primaryAttributes).filter((a) => a != "luck")).slice(0, numAttrs);
+    const attrsInit = shuffle(attrNames.filter((a) => a != "luck")).slice(0, numAttrs);
     console.log(attrsInit);
 
-    generateSkills(options, attrsInit);
-
+    const skills = generateSkills(options, attrsInit);
+    const attrsActual = getAttrsFromSkills(options, skills);
+    console.log(attrsActual);
+    console.log(skills);
 }
 
 export {
