@@ -116,7 +116,7 @@ const randomizerSettings = {
         name: 'Marksman Is Weapon',
         description: 'If enabled, the generator will consider marksman a weapon skill.',
         type: "bool",
-        default: false
+        default: true
     },
     HandToHandIsWeapon: {
         name: 'Count Unarmored As Armor',
@@ -134,7 +134,6 @@ const randomizerSettings = {
             "alteration"
         ]
     },
-
     ArmorSkills: {
         name: 'Lockpicking Skills',
         description: 'The skills the generator counts as able to open locks',
@@ -158,6 +157,15 @@ const randomizerSettings = {
             "hand-to-hand",
             "short_blade",
             "marksman"
+        ]
+    },
+    DisabledSkills: {
+        name: 'Disabled Skills',
+        description: 'The skills the generator counts as able to open locks',
+        type: "array", 
+        default: [
+            "armorer",
+            "hand-to-hand",
         ]
     },
 };
