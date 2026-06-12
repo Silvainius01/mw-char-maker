@@ -182,5 +182,5 @@ export {
     createSpecialsHtml,
     getIconSrc,
     randomElement,
-    shuffle
+    shuffle,
 }

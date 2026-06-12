@@ -39,11 +39,11 @@ function getSpecFromSkills(options, _skills) {
         stealth: 0
     }
 
-    for(let i = 0; i < _skills.length; ++i) {
+    for (let i = 0; i < _skills.length; ++i) {
         const s = spec(_skills[i]);
         const score = i < halfLength ? majorWeight : minorWeight;
         specCount[s] += score;
-        if(specCount[s] > specCount[most])
+        if (specCount[s] > specCount[most])
             most = s;
     }
     return most;
@@ -294,6 +294,21 @@ function generateRaceDistribution(options, _skills, attributes) {
     return scores;
 }
 
+function logDistribution(name, distro, minScore) {
+    let msg = `${name} Distribution:`
+    const entries = Object.entries(distro)
+        .filter((e) => e[0] !== "total" && e[1] !== undefined)
+        .sort((a, b) => b[1].score - a[1].score);
+    entries.forEach((entry) => {
+        const tabs = entry[0].length < 15 ? "\t\t" : "\t";
+        let chance = entry[1].score >= minScore
+            ? (entry[1].score / distro.total) * 100
+            : 0;
+            msg += `\n\t${entry[0]}:${tabs}${chance.toFixed(2)}% (${entry[1].score})`
+    });
+    console.log(msg);
+}
+
 function generateCharacter(options) {
     console.log("Generating new character...");
 
@@ -341,6 +356,7 @@ function generateCharacter(options) {
 
     console.log(selectedRace[0]);
     console.log(firstAttribute + " " + secondAttribute);
+    logDistribution("Race", raceScores, options['MinRaceScore'].value);
 
     const nsHalf = options['NumSkills'].value / 2;
     const newState = {

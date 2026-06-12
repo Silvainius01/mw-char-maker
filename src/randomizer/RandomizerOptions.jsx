@@ -40,7 +40,6 @@ function RandomizerOptions(props) {
         console.log("reset!");
     }
 
-    
     // Generate useState hooks for every option
     const hookDict = {}
     Object.entries(settings).forEach((e) => {

@@ -5,15 +5,21 @@ function RandomizerInfo(props) {
                 <div className="randomizer-how-to">
                     <div className="title">Generation Process</div>
                     <br/>
-                    Clicking 'Randomize' will, by default, generate a character through a 5-step process:
+                    Clicking 'Randomize' will generate a character through the following process:
                     <p>1. Choose 3 random attributes. </p>
                     <p>2. Choose 10 random skills governed by those attributes</p>
-                    <p>3. Choose a specialization based on skill selection</p>
-                    <p>4. Generate weighted distributions for both race and faction based on the attributes and skills that were selected</p>
-                    <p>5. Randomly pull a race and two factions from those distributions.</p>
+                    <p>3. Choose a specialization based on major and minor skills</p>
+                    <p>4. Generate weighted distributions for race based on the attributes and skills that were selected</p>
+                    <p>5. Randomly pull a race from those distributions.</p>
+                    <p>6. Randomly select a birthsign.</p>
 
-                    Note that Males and Females are considered as different races when generating the distribution, so the differences between the sexes are automatically factored in.
-                    (e.g.) Male Dark Elf and Female Dark Elf are processed as different races with identical skill bonuses but different attributes.
+                    Note that Males and Females are considered different races when generating the distribution.
+                    <br/>
+                    (e.g. Male Dark Elf and Female Dark Elf are processed as different races with identical skill bonuses but different attributes.)
+                    <br/><br/>
+                    Most of the buttons, levers, and dials that control the behaviour of the generator are availble to play with in the options menu.
+                    <br/><br/>
+                    If you want to see the statistics of the race distribution, press F12 and go to the debug console. I print it off in there.
                 </div>
             </div>
             <button onClick={props.onSelectionClick}>OK</button>
