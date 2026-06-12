@@ -15,7 +15,7 @@ const randomizerSettings = {
         name: 'Max Weapon Skills',
         description: 'The maximum amount of weapon skills that can be included.',
         type: "number",
-        default: 2
+        default: 1
     },
     MaxArmorSkills: {
         name: 'Max Armor Skills',
@@ -78,7 +78,7 @@ const randomizerSettings = {
         name: 'Minor Skill Spec Weight',
         description: 'How important Minor Skills are when determining specializtion.',
         type: "number",
-        default: 1.5
+        default: 1.25
     },
 
     AllowAdvFactionPairs: {
@@ -114,21 +114,27 @@ const randomizerSettings = {
 
     UnarmoredIsArmor: {
         name: 'Unarmored Is Armor',
-        description: 'If enabled, the generator will consider unarmored an armor skill.',
+        description: `If enabled, the generator will consider unarmored an armor skill.\n\nTurning this off is helpful for beast races.`,
         type: "bool",
         default: false
     },
     MarksmanIsWeapon: {
         name: 'Marksman Is Weapon',
-        description: 'If enabled, the generator will consider marksman a weapon skill.',
-        type: "bool",
-        default: true
-    },
-    HandToHandIsWeapon: {
-        name: 'Count Unarmored As Armor',
-        description: 'If enabled, the generator will consider Hand-to-Hand a weapon skill.',
+        description: `If enabled, the generator will consider marksman a weapon skill.\n\nReccomended to turn off if 'Max Weapon Skill' is set to 1.`,
         type: "bool",
         default: false
+    },
+    HandToHandIsWeapon: {
+        name: 'Hand-to-Hand Is Weapon',
+        description: `If enabled, the generator will consider Hand-to-Hand a weapon skill.\n\nReccomended to turn off if 'Max Weapon Skill' is set to 1.`,
+        type: "bool",
+        default: false
+    },
+    IgnoreDisabledSkills: {
+        name: 'Ignore Disabled Skills',
+        description: `If enabled, the generator will never use skills that have been disabled.\n\nBy default, these skills are Armorer and Hand to Hand`,
+        type: "bool",
+        default: true
     },
 
     LockSkills: {
@@ -154,7 +160,7 @@ const randomizerSettings = {
     WeaponSkills: {
         name: 'Lockpicking Skills',
         description: 'The skills the generator counts as able to open locks',
-        type: "array", 
+        type: "array",
         default: [
             "axe",
             "blunt_weapon",
@@ -168,7 +174,7 @@ const randomizerSettings = {
     DisabledSkills: {
         name: 'Disabled Skills',
         description: 'The skills the generator counts as able to open locks',
-        type: "array", 
+        type: "array",
         default: [
             "armorer",
             "hand-to-hand",

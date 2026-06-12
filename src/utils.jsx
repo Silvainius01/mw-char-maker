@@ -154,6 +154,10 @@ function getIconSrc(path) {
     return modules[path].default;
 }
 
+function randomElement(array) {
+    let rIndex = Math.floor(Math.random() * array.length);
+    return array[rIndex];
+}
 // Fisher-Yates
 function shuffle(array) {
     if(!Array.isArray(array))
@@ -177,5 +181,6 @@ export {
     toPresentationStr,
     createSpecialsHtml,
     getIconSrc,
+    randomElement,
     shuffle
 }

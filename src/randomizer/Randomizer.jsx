@@ -1,8 +1,9 @@
-import { shuffle } from "../utils";
+import { randomElement, shuffle } from "../utils";
 
 import races from "../gamedata/races";
 import skills from "../gamedata/skills";
 import primaryAttributes from "../gamedata/primaryAttributes";
+import birthsigns from "../gamedata/birthsigns";
 
 import RandomizerOptionElement from "./RandomizerOptionElement";
 
@@ -310,7 +311,6 @@ function generateCharacter(options) {
 
     const attrScores = generateAttrDistribution(options, classSkills, attrsActual);
     const raceScores = generateRaceDistribution(options, classSkills, attrsActual);
-
     const randomEntry = (scores, minScore) => {
         const r = Math.random();
         const totalScore = scores.total;
@@ -337,6 +337,8 @@ function generateCharacter(options) {
     const secondAttribute = attrsActual[1];
     const specialization = getSpecFromSkills(options, classSkills);
     const selectedRace = randomEntry(raceScores, options['MinRaceScore'].value);
+    const birthsign = randomElement(Object.keys(birthsigns));
+
     console.log(selectedRace[0]);
     console.log(firstAttribute + " " + secondAttribute);
 
@@ -345,6 +347,7 @@ function generateCharacter(options) {
         race: selectedRace[1].name,
         sex: selectedRace[1].sex,
         specialization: specialization,
+        birthsign: birthsign,
         favoredAttributes: [firstAttribute, secondAttribute],
         majorSkills: classSkills.slice(0, nsHalf),
         minorSkills: classSkills.slice(nsHalf)
