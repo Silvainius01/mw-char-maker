@@ -310,6 +310,7 @@ function logDistribution(name, distro, minScore) {
 }
 
 function generateCharacter(options) {
+    console.clear();
     console.log("Generating new character...");
 
     // Shorthands for settings
@@ -317,15 +318,15 @@ function generateCharacter(options) {
 
     // Choose random attributes
     const attrsInit = shuffle(attrNames.filter((a) => a != "luck")).slice(0, numAttrs);
-    console.log(attrsInit);
-
+    
     const classSkills = generateSkills(options, attrsInit);
-    const attrsActual = getAttrsFromSkills(options, classSkills);
-    console.log(attrsActual);
+    //const attrsActual = getAttrsFromSkills(options, classSkills);
+    
+    console.log(attrsInit);
     console.log(classSkills);
 
-    const attrScores = generateAttrDistribution(options, classSkills, attrsActual);
-    const raceScores = generateRaceDistribution(options, classSkills, attrsActual);
+    const attrScores = generateAttrDistribution(options, classSkills, attrsInit);
+    const raceScores = generateRaceDistribution(options, classSkills, attrsInit);
     const randomEntry = (scores, minScore) => {
         const r = Math.random();
         const totalScore = scores.total;
@@ -348,8 +349,8 @@ function generateCharacter(options) {
         return entries[selected];
     }
 
-    const firstAttribute = attrsActual[0];
-    const secondAttribute = attrsActual[1];
+    const firstAttribute = randomElement(attrsInit);
+    const secondAttribute = randomElement(attrsInit.filter((a) => a !== firstAttribute));
     const specialization = getSpecFromSkills(options, classSkills);
     const selectedRace = randomEntry(raceScores, options['MinRaceScore'].value);
     const birthsign = randomElement(Object.keys(birthsigns));
