@@ -304,7 +304,7 @@ function logDistribution(name, distro, minScore) {
         let chance = entry[1].score >= minScore
             ? (entry[1].score / distro.total) * 100
             : 0;
-            msg += `\n\t${entry[0]}:${tabs}${chance.toFixed(2)}% (${entry[1].score})`
+        msg += `\n\t${entry[0]}:${tabs}${chance.toFixed(2)}% (${entry[1].score})`
     });
     console.log(msg);
 }
@@ -315,18 +315,18 @@ function generateCharacter(options) {
 
     // Shorthands for settings
     const numAttrs = options['NumAttributes'].value;
+    const useWeightedRaces = options['UseWeightedRaces'].value;
 
     // Choose random attributes
     const attrsInit = shuffle(attrNames.filter((a) => a != "luck")).slice(0, numAttrs);
-    
+
     const classSkills = generateSkills(options, attrsInit);
     //const attrsActual = getAttrsFromSkills(options, classSkills);
-    
+
     console.log(attrsInit);
     console.log(classSkills);
 
-    const attrScores = generateAttrDistribution(options, classSkills, attrsInit);
-    const raceScores = generateRaceDistribution(options, classSkills, attrsInit);
+    // const attrScores = generateAttrDistribution(options, classSkills, attrsInit);
     const randomEntry = (scores, minScore) => {
         const r = Math.random();
         const totalScore = scores.total;
@@ -352,12 +352,22 @@ function generateCharacter(options) {
     const firstAttribute = randomElement(attrsInit);
     const secondAttribute = randomElement(attrsInit.filter((a) => a !== firstAttribute));
     const specialization = getSpecFromSkills(options, classSkills);
-    const selectedRace = randomEntry(raceScores, options['MinRaceScore'].value);
     const birthsign = randomElement(Object.keys(birthsigns));
+    let selectedRace = undefined;
+
+    if (useWeightedRaces) {
+        const raceScores = generateRaceDistribution(options, classSkills, attrsInit);
+        selectedRace = randomEntry(raceScores, options['MinRaceScore'].value);
+        logDistribution("Race", raceScores, options['MinRaceScore'].value);
+    }
+    else {
+        const race = randomElement(Object.entries(races))[0];
+        const sex = Math.random() < 0.5 ? 'male' : 'female';
+        selectedRace = [`${sex} ${race}`, { name: race, sex: sex }];
+    }
 
     console.log(selectedRace[0]);
     console.log(firstAttribute + " " + secondAttribute);
-    logDistribution("Race", raceScores, options['MinRaceScore'].value);
 
     const nsHalf = options['NumSkills'].value / 2;
     const newState = {

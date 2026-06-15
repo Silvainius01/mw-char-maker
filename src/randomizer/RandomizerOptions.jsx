@@ -76,6 +76,7 @@ function RandomizerOptions(props) {
                 <RandomizerOptionElement name='MaxArmorSkills' type="number" randomizer={props.randomizer} hooks={hookDict} />
                 <RandomizerOptionElement name='MaxLockSkills' type="number" randomizer={props.randomizer} hooks={hookDict} />
                 <br />
+                <RandomizerOptionElement name='UseWeightedRaces' type="button" randomizer={props.randomizer} hooks={hookDict} />
                 <RandomizerOptionElement name='RaceSkillWeight' type="number" randomizer={props.randomizer} hooks={hookDict} />
                 <RandomizerOptionElement name='RaceAttributeWeight' type="number" randomizer={props.randomizer} hooks={hookDict} />
                 <RandomizerOptionElement name='MinRaceScore' type="number" randomizer={props.randomizer} hooks={hookDict} />

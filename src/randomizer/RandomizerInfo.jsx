@@ -9,11 +9,10 @@ function RandomizerInfo(props) {
                     <p>1. Choose 3 random attributes. </p>
                     <p>2. Choose 10 random skills governed by those attributes</p>
                     <p>3. Choose a specialization based on major and minor skills</p>
-                    <p>4. Generate weighted distributions for race based on the attributes and skills that were selected</p>
-                    <p>5. Randomly pull a race from those distributions.</p>
-                    <p>6. Randomly select a birthsign.</p>
+                    <p>4. Randomly select a race, sex, and birthsign</p>
 
-                    Note that Males and Females are considered different races when generating the distribution.
+
+                    Note that Males and Females are considered different races when generating with the weighted distribution option.
                     <br/>
                     (e.g. Male Dark Elf and Female Dark Elf are processed as different races with identical skill bonuses but different attributes.)
                     <br/><br/>

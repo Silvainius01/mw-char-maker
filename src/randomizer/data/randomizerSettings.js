@@ -30,6 +30,12 @@ const randomizerSettings = {
         default: 1
     },
 
+    UseWeightedRaces: {
+        name: 'Use Weighted Races',
+        description: `If enabled, the generator will use a weighted distribution for race selection based on skills and attributes.\n\nWARNING: this will heavily favor races that are capable all-rounders or have some capacity for magic.`,
+        type: "bool",
+        default: false
+    },
     RaceSkillWeight: {
         name: 'Race Skill Weight',
         description: 'How important skill bonuses are when building the distribution for races.',
