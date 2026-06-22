@@ -44,23 +44,6 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    // Set initial state from query string. Use default character aspects if query string is invalid.
-    try {
-      const queryStr = window.location.search;
-      if (queryStr) {
-        this.state = Object.assign(initialState, getStateFromQueryString(queryStr));
-      }
-    }
-    catch (e) {
-      console.warn('Invalid query string provided.  Using default character.');
-    }
-    finally {
-      if (!this.state) {
-        this.state = initialState;
-        this.setQueryStringFromState(this.state);
-      }
-    }
-
     this.eventHandlers = {
       person: {
         onRaceClick: this.onShowSelector.bind(this, 'race'),
@@ -93,6 +76,24 @@ class App extends Component {
     const settings = this.randomizer.settings;
     for (let key of Object.keys(settings)) {
       settings[key].value = settings[key].default;
+    }
+
+    // Set initial state from query string. Use default character aspects if query string is invalid.
+    try {
+      const queryStr = window.location.search;
+      if (queryStr) {
+        this.state = Object.assign(initialState, getStateFromQueryString(queryStr));
+      }
+    }
+    catch (e) {
+      console.warn('Invalid query string provided.  Using default character.');
+    }
+    finally {
+      if (!this.state) {
+        this.state = generateCharacter(this.randomizer.settings);
+        this.state.selecting = initialState.selecting;
+        this.setQueryStringFromState(this.state);
+      }
     }
 
     console.log("hello");
